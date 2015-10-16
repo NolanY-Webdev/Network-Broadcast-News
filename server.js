@@ -12,4 +12,4 @@ server.listen(PORT, function() {
   console.log('server bound');
 });
 
-server.createConnection(PORT, '0.0.0.0');
+net.createConnection(PORT, '0.0.0.0');
