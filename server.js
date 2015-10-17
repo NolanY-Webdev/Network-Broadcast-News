@@ -8,15 +8,21 @@ var server = net.createServer(function(socket) {
   sockets.push(socket);
   var userID = socket._handle.fd;
   sockets[sockets.length - 1].userID = userID;
-  sockets[sockets.length - 1].write('To change your User ID Type \'RENAME <new name here>\'');
+  sockets[sockets.length - 1].write('Welcome to the chat thingy! To change your User ID Type \'RENAME <new name here>\'');
 
   socket.on('data', function(data) {
 
     for (var i = 0; i < sockets.length; i++ ) {
       if (data.toString().substring(0, 13) == 'said: RENAME ') {
         var newname = data.toString().slice( 13 );;
-        sockets[sockets.indexOf(socket)].userID = newname;
-        userID = newname;
+        if (newname.toLowerCase().indexOf('admin') !== -1) {
+          sockets[sockets.indexOf(socket)].userID = 'I tried to pose as an admin and all I got was this shitty username';
+          userID = 'I tried to pose as an admin and all I got was this shitty username';
+          sockets[sockets.length - 1].write('Names containing \'admin\' are not allowed');
+        } else {
+          sockets[sockets.indexOf(socket)].userID = newname;
+          userID = newname;
+        }
       } else {
         if ( sockets[i] === socket ) continue;
         sockets[i].write('USER: ' + userID + ' ' + data.toString());
