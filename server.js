@@ -3,6 +3,9 @@ var PORT = 6969;
 var IP = '0.0.0.0';
 var sockets = [];
 
+//RED WORDS console.log('\x1b[31m%s\x1b[0m: ', 'words');
+
+
 var server = net.createServer(function(socket) {
   console.log('client connected USER ID:' + socket._handle.fd);
   sockets.push(socket);
@@ -13,7 +16,7 @@ var server = net.createServer(function(socket) {
   socket.on('data', function(data) {
 
     if (data.toString().substring(0, 13) == 'said: RENAME ') {
-      var newname = data.toString().slice( 13 );;
+      var newname = data.toString().slice( 13 );
       if (newname.toLowerCase().indexOf('admin') !== -1) {
         sockets[sockets.indexOf(socket)].userID = 'I tried to pose as an admin and all I got was this shitty username';
         userID = 'I tried to pose as an admin and all I got was this shitty username';
@@ -30,7 +33,19 @@ var server = net.createServer(function(socket) {
         sockets[i].write('USER: ' + userID + ' ' + data.toString());
       }
     }
+
   });
+
+
+
+//BROKEN
+  process.stdin.on('data', function(data) {
+    var adminWords = data.toString();
+    var adminToClient = ('\x1b[31m%s\x1b[0m: ', ('[ADMIN]: ' + adminWords));
+    console.log('\x1b[31m%s\x1b[0m: ', adminWords);
+    socket.write('\x1b[31m%s\x1b[0m: ', adminToClient);
+  });
+//BROKEN
 
   socket.on('end', function() {
     console.log('client disconnected USER: ' + userID);
