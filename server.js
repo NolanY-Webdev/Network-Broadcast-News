@@ -20,7 +20,7 @@ var server = net.createServer(function(socket) {
       if (newname.toLowerCase().indexOf('admin') !== -1) {
         sockets[sockets.indexOf(socket)].userID = 'I tried to pose as an admin and all I got was this shitty username';
         userID = 'I tried to pose as an admin and all I got was this shitty username';
-        sockets[sockets.length - 1].write('Names containing \'admin\' are not allowed');
+        socket.write('Names containing \'admin\' are not allowed. ');
       } else {
         sockets[sockets.indexOf(socket)].userID = newname;
         userID = newname;
@@ -36,16 +36,10 @@ var server = net.createServer(function(socket) {
 
   });
 
-
-
-//BROKEN
   process.stdin.on('data', function(data) {
     var adminWords = data.toString();
-    var adminToClient = ('\x1b[31m%s\x1b[0m: ', ('[ADMIN]: ' + adminWords));
-    console.log('\x1b[31m%s\x1b[0m: ', adminWords);
-    socket.write('\x1b[31m%s\x1b[0m: ', adminToClient);
+    socket.write('[ADMIN]: ' + adminWords);
   });
-//BROKEN
 
   socket.on('end', function() {
     console.log('client disconnected USER: ' + userID);
@@ -65,3 +59,9 @@ server.listen(PORT, function() {
 
 
 net.createConnection(PORT, IP);
+
+
+
+
+
+// cd DevLeague/Network-Broadcast-News/

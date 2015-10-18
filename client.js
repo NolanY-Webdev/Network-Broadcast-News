@@ -14,5 +14,9 @@ client.connect({ port : PORT, host : HOST },
   });
 
 client.on('data', function(data) {
-  console.log(data.toString());
+  if (data.toString().substring(0, 8) == '[ADMIN]:') {
+    console.log('\x1b[31m%s\x1b[0m ', data );
+  } else {
+    console.log(data.toString());
+  }
 });
